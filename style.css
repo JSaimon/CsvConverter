@@ -1,0 +1,138 @@
+* {
+  background-color: linen;
+  font-family: "Inconsolata", monospace;
+  font-family: "Kanit", sans-serif;
+}
+
+.header {
+  height: 15%;
+  color: rgb(50, 50, 50);
+}
+
+.header h2 {
+  font-size: 6vh;
+  display: inline;
+}
+
+.header span {
+  font-size: 1.5vh;
+}
+
+.body {
+  width: 90%;
+  height: 75%;
+  margin: auto;
+}
+
+.convertionContainer {
+  height: 85%;
+  display: flex;
+}
+
+.csvContainer,
+.jsonContainer {
+  width: 50%;
+}
+
+.csvContainer,
+.jsonContainer {
+  margin-top: 5%;
+}
+
+.insertText {
+  display: block;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.textContainer {
+  display: block;
+  margin: auto;
+  width: 80%;
+  height: 90%;
+  resize: none;
+  border: solid 2px black;
+  border-radius: 50px;
+  font-size: 1em;
+  padding: 10px;
+}
+
+.textContainer:focus {
+  border: solid 5px black;
+  outline: none;
+}
+
+.textContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.convertButton {
+  display: block;
+  height: 8%;
+  width: 19%;
+  margin-top: 2%;
+  margin-left: 5%;
+  border-radius: 15px;
+  background-color: #318ce7;
+  border: solid 1px black;
+  font-size: 1.25em;
+  color: linen;
+}
+
+.footer {
+  height: 10%;
+}
+
+.footer .copyright {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 20%;
+}
+
+.copyrightText {
+  text-align: center;
+}
+
+@media only screen and (min-width: 1900px) {
+  .header h2 {
+    font-size: 6.5vh;
+  }
+
+  .body {
+    width: 90%;
+    height: 80%;
+    margin: auto;
+  }
+
+  .csvContainer,
+  .jsonContainer {
+    margin-top: 0%;
+  }
+
+  .insertText {
+    width: 65%;
+  }
+
+  .textContainer {
+    width: 65%;
+    height: 90%;
+    border: solid 2px black;
+    border-radius: 70px;
+    padding: 20px;
+  }
+
+  .convertButton {
+    height: 7%;
+    width: 11%;
+    margin-left: 9%;
+  }
+
+  .footer {
+    height: 5%;
+  }
+}

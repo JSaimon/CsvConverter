@@ -1,0 +1,50 @@
+FUNCTIONS
+
+1. Convert CSV data to JSON
+    - Format: AAAA;BBBB;CCCC;DDDD
+    - The first row will be the name of the columns
+    - The converted JSON data is shown in the second text area
+
+2. Convert JSON data to CSV
+    - Converted format: AAAA;BBBB;CCCC;DDDD
+    - The property titles will be stored in an Array
+        · If the array doesn't contain the title, it's added and the value is added
+          like array[title] = value (or something like that)
+    - The converted data appears in the first textbox
+
+3. Basic features
+    - Dropdown or input to set the CSV separator
+    - Real-time checker for the data format
+        · Red borders
+        · Disable convert button if incorrect
+        · Show message of the error
+    
+4. Advanced features
+    - Choose between pasting text or uploading a file
+        · File checker (don't allow all files from explorer)
+    - Choose between show the result or download the result
+
+
+STYLES
+
+1. The background will be "Ivory" - #FFFF00
+
+2. The main page will have 2 big textarea
+    - They have a width and height fixed
+    - Black border with rounded corners
+        · Thick border for the selected one (origin of the data)
+
+3. Convert button
+    - Style:
+        · OPTION 1: Rectangle with smooth angles "Convert" between the textareas
+        · OPTION 2: Rectangle with smooth angles "Convert" under the left textarea
+        · OPTION 3: Circle with circle arrows between the textareas
+    - Disable when invalid format of the selected textarea
+    
+4. Error message
+    - Shown as a bubble (like comics)
+
+5. Advanced styles
+    - Ask if the data will be written or a file
+        · Hide/show textareas
+        · Hide/show upload file view
