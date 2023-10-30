@@ -27,17 +27,17 @@ FUNCTIONS
 
 STYLES
 
-1. The background will be "Ivory" - #FFFF00
+1. The background will be "Linen" (v)
 
-2. The main page will have 2 big textarea
+2. The main page will have 2 big textarea (v)
     - They have a width and height fixed
     - Black border with rounded corners
         · Thick border for the selected one (origin of the data)
 
 3. Convert button
-    - Style:
+    - Style: (v)
         · OPTION 1: Rectangle with smooth angles "Convert" between the textareas
-        · OPTION 2: Rectangle with smooth angles "Convert" under the left textarea
+        · OPTION 2: Rectangle with smooth angles "Convert" under the left textarea (v)
         · OPTION 3: Circle with circle arrows between the textareas
     - Disable when invalid format of the selected textarea
     
