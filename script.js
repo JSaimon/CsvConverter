@@ -3,7 +3,8 @@ const jsonTextArea = document.querySelector(".jsonText");
 const convertButton = document.querySelector(".convertButton");
 const errorMessageSpan = document.querySelector(".errorMessage");
 
-const sampleCsvData = "AAAA;BBBB;CCCC;DDDD";
+const sampleCsvData = "AAAA;BBBB;CCCC;DDDD\naaaa;bbbb;cccc;dddd";
+const sampleJsonData = `[{"a":"b"}, {"a":"b", "c":"d"}]`;
 const separator = ";";
 
 csvTextArea.addEventListener("focus", function () {
@@ -22,6 +23,8 @@ jsonTextArea.addEventListener("focus", function () {
 
 convertButton.addEventListener("click", function (event) {
   event.preventDefault();
+  _resetError();
+
   if (csvTextArea.classList.contains("focused")) {
     convertCsvToJson();
   }
@@ -39,44 +42,52 @@ const convertCsvToJson = function () {
   if (isValidCsv) {
     // Separates the data in a List of arrays
     const csvDataList = _convertDataToList(csvData);
-    // Converts the data to the JSON
-    const jsonText = _convertValuesToJson(csvDataList);
-    // Shows the JSON in the JSON Textarea
-    jsonTextArea.innerHTML = jsonText;
-  }
 
-  _showHideError(isValidCsv);
+    const jsonText = _convertValuesToJson(csvDataList);
+
+    // Shows the JSON in the JSON Textarea
+    jsonTextArea.value = jsonText;
+  } else {
+    const message = "ERROR: The CSV format is invalid, please check it again!";
+    _showError(message, csvTextArea);
+  }
 };
 
 const convertJsonToCsv = function () {
   let jsonData = jsonTextArea.value;
-  jsonData = `[{"a":"b"}, {"a":"b", "c":"d"}]`;
   // Checks if the value in the area is valid
   try {
-    // Converts the text to a JSON object
     const parsedJsonData = JSON.parse(jsonData);
-    _generateCsvData(parsedJsonData);
-  } catch (error) {
-    console.error("Invalid json", error);
+    const csvText = _generateCsvData(parsedJsonData);
+
+    // Shows the text in the CSV Textarea
+    csvTextArea.value = csvText;
+  } catch {
+    const message = "ERROR: The JSON format is invalid, please check it again!";
+    _showError(message, jsonTextArea);
   }
-  // Stores the object indexes
-  // Writes the CSV text
-  // Shows the text in the CSV Textarea
 };
 
-const _generateCsvData = function (parsedJsonData) {
-  let csvColumns = new Set();
-  let csvData = [];
-  parsedJsonData.forEach((element, index) => {
-    let csvRow = "";
-    for (const [key, value] of Object.entries(element)) {
-      csvColumns.add(key);
-      csvRow += `${value}${separator}`;
-    }
-    console.log(csvColumns);
-    console.log(csvRow);
-  });
+//#region Private methods (Shared)
+
+const _showError = function (message, textArea) {
+  errorMessageSpan.innerHTML = message;
+  textArea.classList.add("error");
 };
+
+const _resetError = function () {
+  if (csvTextArea.classList.contains("error")) {
+    csvTextArea.classList.remove("error");
+  }
+
+  if (jsonTextArea.classList.contains("error")) {
+    jsonTextArea.classList.remove("error");
+  }
+
+  errorMessageSpan.innerHTML = "";
+};
+
+//#endregion
 
 //#region Private Methods (CSV)
 
@@ -112,7 +123,7 @@ const _formatJsonText = function (columnNames, element) {
   let jsonText = "\t{\n";
 
   columnNames.forEach((col, i) => {
-    jsonText += `\t\t"${col}": "${element[i]}"${
+    jsonText += `\t\t"${col}": "${element[i] === undefined ? "" : element[i]}"${
       i === columnNames.length - 1 ? "" : ","
     }\n`;
   });
@@ -136,19 +147,36 @@ const _convertValuesToJson = function (csvList) {
   return jsonText;
 };
 
-const _showHideError = function (hideError) {
-  const errorMessage =
-    "ERROR: The CSV format is invalid, please check it again!";
-  errorMessageSpan.innerHTML = errorMessage;
+//#endregion
 
-  if (hideError) {
-    csvTextArea.classList.remove("error");
-    errorMessageSpan.classList.add("hidden");
-  } else {
-    csvTextArea.classList.add("error");
-    errorMessageSpan.classList.remove("hidden");
-    jsonTextArea.innerHTML = "";
-  }
+//#region Private Methods (JSON)
+
+const _generateCsvData = function (parsedJsonData) {
+  let csvColumns = new Set();
+  let csvData = [];
+  parsedJsonData.forEach((element, index) => {
+    let csvRow = "";
+    for (const [key, value] of Object.entries(element)) {
+      // Stores the object indexes
+      csvColumns.add(key);
+      csvRow += `${value}${separator}`;
+    }
+    csvData[index] = csvRow.slice(0, -1);
+  });
+
+  // Writes the CSV text
+  let csvText = `${[...csvColumns].join(";")}\n`;
+  csvText += _writeCsvRows(csvData);
+
+  return csvText;
+};
+
+const _writeCsvRows = function (csvRowsArray) {
+  let csvRowsText = "";
+  csvRowsArray.forEach((element) => {
+    csvRowsText += `${element}\n`;
+  });
+  return csvRowsText.trim();
 };
 
 //#endregion

@@ -1,11 +1,11 @@
 FUNCTIONS
 
-1. Convert CSV data to JSON
+1. Convert CSV data to JSON (v)
     - Format: AAAA;BBBB;CCCC;DDDD
     - The first row will be the name of the columns
     - The converted JSON data is shown in the second text area
 
-2. Convert JSON data to CSV
+2. Convert JSON data to CSV (v)
     - Converted format: AAAA;BBBB;CCCC;DDDD
     - The property titles will be stored in an Array
         · If the array doesn't contain the title, it's added and the value is added
