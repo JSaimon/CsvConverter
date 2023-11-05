@@ -53,6 +53,7 @@
 }
 
 .insertText {
+  font-size: 1.7vh;
   display: block;
   width: 80%;
   margin-right: auto;
@@ -75,11 +76,26 @@
   display: none;
 }
 
+.separatorContainer {
+  font-size: 1.7vh;
+  margin-top: 1%;
+  margin-left: 5%;
+}
+
+.separator {
+  appearance: none;
+  padding: 0.3% 0.7%;
+  outline: none;
+  font-weight: bolder;
+  border: solid 3px black;
+  border-radius: 25%;
+}
+
 .convertButton {
-  display: block;
+  display: inline-block;
   height: 8%;
   width: 19%;
-  margin-top: 2%;
+  margin-top: 1.5%;
   margin-left: 5%;
   border-radius: 15px;
   background-color: #318ce7;
@@ -89,7 +105,7 @@
 }
 
 .errorMessage {
-  display: block;
+  display: inline-block;
   margin-left: 5%;
   margin-top: 2%;
   color: #c60c30;
@@ -141,15 +157,24 @@
     padding: 20px;
   }
 
+  .separatorContainer {
+    margin-top: 0.5%;
+    margin-left: 9%;
+  }
+
+  .separator {
+    padding: 0.3% 0.5%;
+  }
+
   .convertButton {
     height: 7%;
     width: 11%;
+    margin-top: 1%;
     margin-left: 9%;
   }
 
   .error-message {
     margin-left: 9%;
-    margin-top: 1%;
   }
 
   .footer {

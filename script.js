@@ -1,11 +1,11 @@
 const csvTextArea = document.querySelector(".csvText");
 const jsonTextArea = document.querySelector(".jsonText");
+const separatorSelect = document.querySelector(".separator");
 const convertButton = document.querySelector(".convertButton");
 const errorMessageSpan = document.querySelector(".errorMessage");
 
 const sampleCsvData = "AAAA;BBBB;CCCC;DDDD\naaaa;bbbb;cccc;dddd";
 const sampleJsonData = `[{"a":"b"}, {"a":"b", "c":"d"}]`;
-const separator = ";";
 
 csvTextArea.addEventListener("focus", function () {
   csvTextArea.classList.add("focused");
@@ -38,18 +38,22 @@ const convertCsvToJson = function () {
   const csvData = csvTextArea.value;
   const isValidCsv = _isCsvDataValid(csvData);
 
-  // Checks that the value in the area is valid
-  if (isValidCsv) {
-    // Separates the data in a List of arrays
-    const csvDataList = _convertDataToList(csvData);
+  try {
+    // Checks that the value in the area is valid
+    if (isValidCsv) {
+      // Separates the data in a List of arrays
+      const csvDataList = _convertDataToList(csvData);
 
-    const jsonText = _convertValuesToJson(csvDataList);
+      const jsonText = _convertValuesToJson(csvDataList);
 
-    // Shows the JSON in the JSON Textarea
-    jsonTextArea.value = jsonText;
-  } else {
-    const message = "ERROR: The CSV format is invalid, please check it again!";
-    _showError(message, csvTextArea);
+      // Shows the JSON in the JSON Textarea
+      jsonTextArea.value = jsonText;
+    } else {
+      const message = "The CSV format is invalid, please check it again!";
+      throw new Error(message);
+    }
+  } catch (error) {
+    _showError(`ERROR: ${error}`, csvTextArea);
   }
 };
 
@@ -92,6 +96,7 @@ const _resetError = function () {
 //#region Private Methods (CSV)
 
 const _isCsvDataValid = function (csvData) {
+  const separator = separatorSelect.value;
   const firstRowData = csvData.split("\n")[0];
   let isValid = false;
   if (csvData && csvData !== "") {
@@ -109,10 +114,17 @@ const _isCsvDataValid = function (csvData) {
 };
 
 const _convertDataToList = function (csvData) {
+  const separator = separatorSelect.value;
   const csvDataList = csvData.split("\n");
   const separatedCsvDataList = [];
 
   csvDataList.forEach((element, index) => {
+    if (element.indexOf(separator) < 0) {
+      throw new Error(
+        `One or more CSV values doesn't contain the separator: "${separator}"`
+      );
+    }
+
     separatedCsvDataList[index] = element.split(separator);
   });
 
@@ -155,6 +167,7 @@ const _generateCsvData = function (parsedJsonData) {
   let csvColumns = new Set();
   let csvData = [];
   parsedJsonData.forEach((element, index) => {
+    const separator = separatorSelect.value;
     let csvRow = "";
     for (const [key, value] of Object.entries(element)) {
       // Stores the object indexes
