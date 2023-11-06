@@ -12,17 +12,18 @@ FUNCTIONS
           like array[title] = value (or something like that)
     - The converted data appears in the first textbox
 
-3. Basic features
-    - Dropdown or input to set the CSV separator
-    - Real-time checker for the data format
+3. Basic features (v)
+    - Dropdown or input to set the CSV separator (v)
+    - Real-time checker for the data format (v)
         · Red borders
         · Disable convert button if incorrect
-        · Show message of the error
+        · Show message of the error (x) -> won't do
     
 4. Advanced features
     - Choose between pasting text or uploading a file
         · File checker (don't allow all files from explorer)
     - Choose between show the result or download the result
+    - Remove Convert button
 
 
 STYLES
@@ -34,15 +35,15 @@ STYLES
     - Black border with rounded corners
         · Thick border for the selected one (origin of the data)
 
-3. Convert button
+3. Convert button (v)
     - Style: (v)
         · OPTION 1: Rectangle with smooth angles "Convert" between the textareas
         · OPTION 2: Rectangle with smooth angles "Convert" under the left textarea (v)
         · OPTION 3: Circle with circle arrows between the textareas
-    - Disable when invalid format of the selected textarea
+    - Disable when invalid format of the selected textarea (v)
     
-4. Error message
-    - Shown as a bubble (like comics)
+4. Error message (v)
+    - Shown as a bubble (like comics) (x) -> Preferred to write in the page
 
 5. Advanced styles
     - Ask if the data will be written or a file

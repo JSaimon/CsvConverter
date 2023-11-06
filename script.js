@@ -14,11 +14,32 @@ csvTextArea.addEventListener("focus", function () {
     jsonTextArea.classList.remove("focused");
 });
 
+csvTextArea.addEventListener("input", function () {
+  if (!_isCsvDataFormatValid(csvTextArea.value)) {
+    csvTextArea.classList.add("error");
+    _disableConvertButton();
+  } else {
+    _resetError();
+    _enableConvertButton();
+  }
+});
+
 jsonTextArea.addEventListener("focus", function () {
   jsonTextArea.classList.add("focused");
 
   if (csvTextArea.classList.contains("focused"))
     csvTextArea.classList.remove("focused");
+});
+
+jsonTextArea.addEventListener("input", function () {
+  try {
+    JSON.parse(jsonTextArea.value);
+    _resetError();
+    _enableConvertButton();
+  } catch {
+    jsonTextArea.classList.add("error");
+    _disableConvertButton();
+  }
 });
 
 convertButton.addEventListener("click", function (event) {
@@ -36,7 +57,7 @@ convertButton.addEventListener("click", function (event) {
 
 const convertCsvToJson = function () {
   const csvData = csvTextArea.value;
-  const isValidCsv = _isCsvDataValid(csvData);
+  const isValidCsv = _isCsvDataFormatValid(csvData);
 
   try {
     // Checks that the value in the area is valid
@@ -91,15 +112,23 @@ const _resetError = function () {
   errorMessageSpan.innerHTML = "";
 };
 
+const _disableConvertButton = function () {
+  convertButton.setAttribute("disabled", true);
+};
+
+const _enableConvertButton = function () {
+  convertButton.removeAttribute("disabled");
+};
+
 //#endregion
 
 //#region Private Methods (CSV)
 
-const _isCsvDataValid = function (csvData) {
+const _isCsvDataFormatValid = function (csvData) {
   const separator = separatorSelect.value;
   const firstRowData = csvData.split("\n")[0];
   let isValid = false;
-  if (csvData && csvData !== "") {
+  if (csvData.length > 0) {
     if (
       firstRowData.slice(-1) === separator ||
       firstRowData.slice(0, 1) === separator
@@ -119,12 +148,6 @@ const _convertDataToList = function (csvData) {
   const separatedCsvDataList = [];
 
   csvDataList.forEach((element, index) => {
-    if (element.indexOf(separator) < 0) {
-      throw new Error(
-        `One or more CSV values doesn't contain the separator: "${separator}"`
-      );
-    }
-
     separatedCsvDataList[index] = element.split(separator);
   });
 
@@ -146,6 +169,11 @@ const _formatJsonText = function (columnNames, element) {
 };
 
 const _convertValuesToJson = function (csvList) {
+  // Allows the creation of the JSON creating just the column names
+  if (csvList.length < 2) {
+    csvList.push("");
+  }
+
   const csvColumnNames = csvList.shift();
   let jsonText = "[\n";
 
