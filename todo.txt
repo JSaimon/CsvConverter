@@ -20,10 +20,8 @@ FUNCTIONS
         · Show message of the error (x) -> won't do
     
 4. Advanced features
-    - Choose between pasting text or uploading a file
-        · File checker (don't allow all files from explorer)
-    - Choose between show the result or download the result
-    - Remove Convert button
+    - File checker (don't allow all files from explorer)
+    - Show the result and handle "Download" button
 
 
 STYLES
@@ -46,6 +44,20 @@ STYLES
     - Shown as a bubble (like comics) (x) -> Preferred to write in the page
 
 5. Advanced styles
-    - Ask if the data will be written or a file
-        · Hide/show textareas
-        · Hide/show upload file view
+    - Ask if the data will be written or a file (v)
+        · Show window as soon as the page loads asking it (x)
+        · Hide/show textareas (x)
+        · Hide/show upload file view (x)
+
+        Finally decision is to show both, the textarea will be filled with the text from the
+        file and the converted
+    
+    - Show name of the selected file instead of "or write your text in the text boxes below"
+      when a file is loaded
+
+    - Think about "Download button"
+        · Where should it be?
+            Next to the "Convert" button
+        · When should be pressable/visible?
+            After any successful conversion
+        
