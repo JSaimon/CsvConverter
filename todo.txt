@@ -20,8 +20,8 @@ FUNCTIONS
         · Show message of the error (x) -> won't do
     
 4. Advanced features
-    - File checker (don't allow all files from explorer)
-    - Show the result and handle "Download" button
+    - File checker (don't allow all files from explorer) (v)
+    - Show the result and handle "Download" button (v)
 
 
 STYLES
@@ -53,11 +53,13 @@ STYLES
         file and the converted
     
     - Show name of the selected file instead of "or write your text in the text boxes below"
-      when a file is loaded
+      when a file is loaded (v)
 
-    - Think about "Download button"
+    - Think about "Download button" (v)
         · Where should it be?
             Next to the "Convert" button
         · When should be pressable/visible?
             After any successful conversion
-        
+
+
+It will need a refactor but at the moment I'll kep it like this

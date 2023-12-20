@@ -2,19 +2,40 @@ const csvTextArea = document.querySelector(".csvText");
 const jsonTextArea = document.querySelector(".jsonText");
 const separatorSelect = document.querySelector(".separator");
 const convertButton = document.querySelector(".convertButton");
+const downloadButton = document.querySelector(".downloadButton");
 const errorMessageSpan = document.querySelector(".errorMessage");
+const inputFile = document.querySelector(".inputfile");
+const orWriteText = document.querySelector(".orWriteText");
 
 const sampleCsvData = "AAAA;BBBB;CCCC;DDDD\naaaa;bbbb;cccc;dddd";
 const sampleJsonData = `[{"a":"b"}, {"a":"b", "c":"d"}]`;
 
+const orWriteTextOriginal = "or write your text in the text boxes below";
+
+//#region Event Listeners
+
+inputFile.addEventListener("change", function () {
+  _hideDownloadButton();
+  if (inputFile.files) {
+    convertFile();
+  }
+});
+
+separatorSelect.addEventListener("change", function () {
+  _hideDownloadButton();
+});
+
 csvTextArea.addEventListener("focus", function () {
   csvTextArea.classList.add("focused");
+  orWriteText.innerHTML = orWriteTextOriginal;
+  _enableConvertButton();
 
   if (jsonTextArea.classList.contains("focused"))
     jsonTextArea.classList.remove("focused");
 });
 
 csvTextArea.addEventListener("input", function () {
+  _hideDownloadButton();
   if (!_isCsvDataFormatValid(csvTextArea.value)) {
     csvTextArea.classList.add("error");
     _disableConvertButton();
@@ -26,37 +47,92 @@ csvTextArea.addEventListener("input", function () {
 
 jsonTextArea.addEventListener("focus", function () {
   jsonTextArea.classList.add("focused");
+  orWriteText.innerHTML = orWriteTextOriginal;
+  _enableConvertButton();
 
   if (csvTextArea.classList.contains("focused"))
     csvTextArea.classList.remove("focused");
 });
 
 jsonTextArea.addEventListener("input", function () {
+  _hideDownloadButton();
   try {
     JSON.parse(jsonTextArea.value);
     _resetError();
     _enableConvertButton();
   } catch {
     jsonTextArea.classList.add("error");
+    console.log(convertButton.classList);
     _disableConvertButton();
   }
 });
 
-convertButton.addEventListener("click", function (event) {
-  event.preventDefault();
+convertButton.addEventListener("click", function () {
   _resetError();
 
   if (csvTextArea.classList.contains("focused")) {
-    convertCsvToJson();
+    convertCsvToJson(csvTextArea.value);
   }
 
   if (jsonTextArea.classList.contains("focused")) {
-    convertJsonToCsv();
+    convertJsonToCsv(jsonTextArea.value);
   }
 });
 
-const convertCsvToJson = function () {
-  const csvData = csvTextArea.value;
+downloadButton.addEventListener("click", function () {
+  const dateTime = new Date();
+  let fileName = `${dateTime.getFullYear()}_${
+    dateTime.getMonth() + 1
+  }_${dateTime.getDate()}_`;
+  let fileToStore;
+
+  if (csvTextArea.classList.contains("focused")) {
+    fileName += "CSV.csv";
+    fileToStore = new Blob([csvTextArea.value], { type: "text/csv" });
+  }
+
+  if (jsonTextArea.classList.contains("focused")) {
+    fileName += "JSON.json";
+    fileToStore = new Blob([jsonTextArea.value], { type: "application/json" });
+  }
+
+  window.URL = window.URL || window.webkitURL;
+  downloadButton.setAttribute("href", window.URL.createObjectURL(fileToStore));
+  downloadButton.setAttribute("download", fileName);
+});
+
+//#endregion
+
+//#region Converters
+
+const convertFile = function () {
+  _resetFocus();
+  const file = inputFile.files[0];
+  orWriteText.innerHTML = inputFile.files[0].name;
+
+  const reader = new FileReader();
+  let fileContent = "";
+  reader.addEventListener("load", function (event) {
+    fileContent = event.target.result;
+    if (file.type === "application/json") {
+      jsonTextArea.value = fileContent;
+      csvTextArea.value = "";
+      convertJsonToCsv(fileContent);
+      jsonTextArea.classList.add("focused");
+    } else if (file.type === "text/csv") {
+      csvTextArea.value = fileContent;
+      jsonTextArea.value = "";
+      convertCsvToJson(fileContent);
+      csvTextArea.classList.add("focused");
+    } else {
+      _showError("ERROR: Invalid file type");
+    }
+  });
+
+  reader.readAsText(file);
+};
+
+const convertCsvToJson = function (csvData) {
   const isValidCsv = _isCsvDataFormatValid(csvData);
 
   try {
@@ -69,17 +145,18 @@ const convertCsvToJson = function () {
 
       // Shows the JSON in the JSON Textarea
       jsonTextArea.value = jsonText;
+      _showDownloadButton();
     } else {
       const message = "The CSV format is invalid, please check it again!";
       throw new Error(message);
     }
   } catch (error) {
     _showError(`ERROR: ${error}`, csvTextArea);
+    _disableConvertButton();
   }
 };
 
-const convertJsonToCsv = function () {
-  let jsonData = jsonTextArea.value;
+const convertJsonToCsv = function (jsonData) {
   // Checks if the value in the area is valid
   try {
     const parsedJsonData = JSON.parse(jsonData);
@@ -87,17 +164,22 @@ const convertJsonToCsv = function () {
 
     // Shows the text in the CSV Textarea
     csvTextArea.value = csvText;
+    _showDownloadButton();
   } catch {
     const message = "ERROR: The JSON format is invalid, please check it again!";
     _showError(message, jsonTextArea);
+    _disableConvertButton();
   }
 };
+//#endregion
 
 //#region Private methods (Shared)
 
 const _showError = function (message, textArea) {
   errorMessageSpan.innerHTML = message;
-  textArea.classList.add("error");
+  if (textArea) {
+    textArea.classList.add("error");
+  }
 };
 
 const _resetError = function () {
@@ -112,12 +194,30 @@ const _resetError = function () {
   errorMessageSpan.innerHTML = "";
 };
 
+const _resetFocus = function () {
+  if (csvTextArea.classList.contains("focused")) {
+    csvTextArea.classList.remove("focused");
+  }
+
+  if (jsonTextArea.classList.contains("focused")) {
+    jsonTextArea.classList.remove("focused");
+  }
+};
+
 const _disableConvertButton = function () {
   convertButton.setAttribute("disabled", true);
 };
 
 const _enableConvertButton = function () {
   convertButton.removeAttribute("disabled");
+};
+
+const _showDownloadButton = function () {
+  downloadButton.style.display = "inline-block";
+};
+
+const _hideDownloadButton = function () {
+  downloadButton.style.display = "none";
 };
 
 //#endregion
@@ -144,7 +244,8 @@ const _isCsvDataFormatValid = function (csvData) {
 
 const _convertDataToList = function (csvData) {
   const separator = separatorSelect.value;
-  const csvDataList = csvData.split("\n");
+  const normalizedCsvData = csvData.replaceAll('"', "");
+  const csvDataList = normalizedCsvData.split("\n");
   const separatedCsvDataList = [];
 
   csvDataList.forEach((element, index) => {

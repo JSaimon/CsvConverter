@@ -18,7 +18,7 @@
 }
 
 .header {
-  height: 15%;
+  height: 10%;
   color: rgb(50, 50, 50);
 }
 
@@ -69,7 +69,8 @@
 
 .selectFileText:focus,
 .selectFileText:hover,
-.convertButton:hover {
+.convertButton:hover,
+.downloadButton:hover {
   background-color: rgba(49, 140, 231, 0.8);
 }
 
@@ -138,9 +139,11 @@
   border-radius: 25%;
 }
 
-.convertButton {
+.convertButton,
+.downloadButton {
   display: inline-block;
   height: 8%;
+  line-height: 5.5vh;
   width: 19%;
   margin-top: 1.5%;
   margin-left: 5%;
@@ -150,12 +153,19 @@
   font-size: 1.25em;
   color: linen;
   cursor: pointer;
+  text-align: center;
+}
+
+.downloadButton {
+  display: none;
+  margin-left: 1% !important;
+  text-decoration: none;
 }
 
 .convertButton[disabled] {
   background-color: lightblue;
   color: white;
-  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .errorMessage {
@@ -172,7 +182,6 @@
 .footer .copyright {
   position: absolute;
   bottom: 0;
-  left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
@@ -224,8 +233,10 @@
     padding: 0.3% 0.5%;
   }
 
-  .convertButton {
+  .convertButton,
+  .downloadButton {
     height: 7%;
+    line-height: 5vh;
     width: 11%;
     margin-top: 1%;
     margin-left: 9%;

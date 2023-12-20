@@ -18,7 +18,13 @@
 
     <div class="body">
       <div class="fileImport">
-        <input type="file" name="file" id="file" class="inputfile" />
+        <input
+          type="file"
+          name="file"
+          id="file"
+          class="inputfile"
+          accept=".json, .csv"
+        />
         <label class="selectFileText" for="file">Choose a file</label>
         <label class="orWriteText"
           >or write your text in the text boxes below</label
@@ -45,7 +51,8 @@
         </select>
       </div>
 
-      <input type="submit" class="convertButton" value="Convert" />
+      <a class="convertButton">Convert</a>
+      <a href="#" class="downloadButton">Download</a>
       <span class="errorMessage"></span
       ><!--hidden-->
     </div>
